@@ -8,9 +8,9 @@ public class figures {
 		boolean side;	//black(1) or white(0)
 		char name;		//K,Q,B,N,R,P, ;
 		
-		public figures(int x, int y, boolean side, char name) {
-			this.x = x;
-			this.y = y;
+		public figures(Square s, boolean side, char name) {
+			this.x = s.x;
+			this.y = s.y;
 			this.sq.setXY(x, y);
 			this.side = side;
 			this.name =name;
