@@ -27,7 +27,7 @@ public class Board {
 	*/
 	public static String incomingFiles() throws IOException{
 		String end ="";
-		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("C:\\here\\in.txt")));
+		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("C:/here/in.txt")));
 		try {
 		    String line;
 		    while ((line = br.readLine()) != null) {
@@ -43,7 +43,7 @@ public class Board {
 		BufferedWriter writer = null;
 		try
 		{
-		    writer = new BufferedWriter( new FileWriter( "C:\\here\\out.txt"));
+		    writer = new BufferedWriter( new FileWriter( "C:/here/out.txt"));
 		    writer.write( incomingFiles());
 
 		}
