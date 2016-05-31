@@ -161,7 +161,7 @@ public class Board {
 
 	public boolean legalMove(int x, int y, int xz, int yz){
 		if (xz<0||xz>4||yz<0||yz>5||(x==xz&&y==yz)) return false;
-		if (upperlowerpoint(boardArray[x][y])=='l'&&playsBlack()) return false;
+		if (upperlowerpoint(boardArray[x][y])!='l'&&playsBlack()) return false;
 		
 		if (boardArray[x][y]=='k' || boardArray[x][y]=='K') {
 			if (xz>x+1||xz<x-1||yz>y+1||yz<y-1) return false;
@@ -199,8 +199,9 @@ public class Board {
 	public Board move(Move m) {
 		Board b = new Board(roundcount, boardArray);
 		try {
-			if ((upperlowerpoint(boardArray[m.s1.y][m.s1.x]) == 'l' && playsBlack())
-					|| (upperlowerpoint(boardArray[m.s1.y][m.s1.x]) == 'u' && playsWhite())) {
+			if (	legalMove(m.s1.x, m.s1.y, m.s2.x, m.s2.y)
+					&& ((upperlowerpoint(boardArray[m.s1.y][m.s1.x]) == 'l' && playsBlack())
+					|| (upperlowerpoint(boardArray[m.s1.y][m.s1.x]) == 'u' && playsWhite()))) {
 
 				// legal move ?
 
@@ -225,11 +226,15 @@ public class Board {
 	public static void main(String[] args) throws IOException {
 		Board z = new Board();
 		z.showStats();
-		String st = "a6-c3";
+		
+		          
+		String st = "a5-a4";
 		Move mo = z.move(st);
 
 		Board j = z.move(mo);
+		String stz = "a2-a3", atzu = "b5-b4";
 		j.showStats();
-
+		
+		
 	}
 }
