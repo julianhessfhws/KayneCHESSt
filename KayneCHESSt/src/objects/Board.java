@@ -182,10 +182,16 @@ public class Board {
 		}
 		if (boardArray[x][y]=='p') {
 			if((yz != y-1)||(xz < x-1 || xz > x+1)) return false;
-			if(boardArray[][])
-		}
-		if (boardArray[x][y]=='p') {
-			
+			if(upperlowerpoint(boardArray[xz][yz])!=upperlowerpoint(boardArray[x][y])&&x==xz) return false;
+			if(upperlowerpoint(boardArray[xz][yz])==upperlowerpoint(boardArray[x][y])&&x!=xz) return false;
+			if(boardArray[xz][yz]=='.' && x!=xz) return false;
+		}		
+		if (boardArray[x][y]=='P') {
+			if((yz != y+1)||(xz < x-1 || xz > x+1)) return false;
+			if(upperlowerpoint(boardArray[xz][yz])!=upperlowerpoint(boardArray[x][y])&&x==xz) return false;
+			if(upperlowerpoint(boardArray[xz][yz])==upperlowerpoint(boardArray[x][y])&&x!=xz) return false;
+			if(boardArray[xz][yz]=='.' && x!=xz) return false;
+		
 		}
 		return true;
 	}
