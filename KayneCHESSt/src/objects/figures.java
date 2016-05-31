@@ -1,22 +1,21 @@
 package objects;
 
-public abstract class figures {
+public class figures {
 	
 		int x; 			//A-E
 		int y;			//1-6
 		Square sq;
 		boolean side;	//black(1) or white(0)
-		char name;		//K,Q,B,N,R,P
+		char name;		//K,Q,B,N,R,P, ;
 		
-		public figures(int x, int y, boolean side) {
+		public figures(int x, int y, boolean side, char name) {
 			this.x = x;
 			this.y = y;
 			this.sq.setXY(x, y);
 			this.side = side;
-			
+			this.name =name;
 		}
 
-		abstract boolean movingLegal(int positionX, int positionY);
 		
 		public int getX() {
 			return x;
