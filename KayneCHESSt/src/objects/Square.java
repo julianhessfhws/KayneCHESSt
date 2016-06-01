@@ -1,7 +1,8 @@
 package objects;
 
 public class Square {
-	int x; int y;
+	int x;
+	int y;
 
 	public int getX() {
 		return x;
@@ -24,6 +25,23 @@ public class Square {
 		this.x = x;
 		this.y = y;
 	}
-	
-	public void setXY(int x, int y) {this.x=x; this.y=y;}
+
+	public void setXY(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+
+	public boolean equals(Square p) {
+		boolean eq = false;
+
+		if (x == p.getX() && y == p.getY()) {
+			eq = true;
+		}
+		return eq;
+	}
+
+	public void setSquare(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
 }

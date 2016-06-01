@@ -7,8 +7,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import org.omg.CosNaming.IstringHelper;
-
 public class Board {
 
 	int roundcount;
@@ -209,20 +207,20 @@ public class Board {
 		return false;
 	}
 
-	public void legalMoves(Board b){
-		for (int i = 0; i < boardArray.length; i++){
-			for (int j = 0; j < boardArray[i].length; j++){
-				if(playsWhite() && upperlowerpoint(boardArray[i][j]) == 'u'){
-					
+	public void legalMoves(Board b) {
+		for (int i = 0; i < boardArray.length; i++) {
+			for (int j = 0; j < boardArray[i].length; j++) {
+				if (playsWhite() && upperlowerpoint(boardArray[i][j]) == 'u') {
+
 				}
-				if(playsBlack() && upperlowerpoint(boardArray[i][j]) == 'l'){
-					
+				if (playsBlack() && upperlowerpoint(boardArray[i][j]) == 'l') {
+
 				}
 			}
 		}
-		
+
 	}
-	
+
 	public Board move(Move m) {
 		Board b = new Board(roundcount, boardArray);
 		try {
@@ -265,4 +263,184 @@ public class Board {
 		}
 
 	}
+
+	// Zeug von Cassie
+
+	public boolean checkLegalMove(char name, Square pCur, Square pNew) {
+		boolean legit = false;
+
+		if (pNew.getX() >= 0 && pNew.getX() <= 5 && pNew.getY() >= 0 && pNew.getY() <= 4
+				&& boardArray[pCur.getX()][pCur.getY()] != '.') {
+			if (name == 'k' || name == 'K') {
+				// System.out.println(Math.abs(pNew.getX() -
+				// pCur.getX()) + " " + Math.abs(pNew.getY() -
+				// pCur.getY()));
+				if (checkCollision(name, pCur, pNew) && Math.abs(pNew.getX() - pCur.getX()) <= 1
+						&& Math.abs(pNew.getY() - pCur.getY()) <= 1)
+					legit = true;
+			}
+			if (name == 'q' || name == 'Q') {
+				if (checkCollision(name, pCur, pNew)
+						&& (checkDiagonalMove(pCur, pNew) || checkVertHoriMove(pCur, pNew)))
+					legit = true;
+			}
+			if (name == 'b' || name == 'B') {
+				if (checkCollision(name, pCur, pNew) && checkDiagonalMove(pCur, pNew))
+					legit = true;
+			}
+			if (name == 'n' || name == 'N') {
+				if (checkCollision(name, pCur, pNew)
+						&& (Math.abs(pNew.getX() - pCur.getX()) == 1 && Math.abs(pNew.getY() - pCur.getY()) == 2)
+						|| (Math.abs(pNew.getX() - pCur.getX()) == 2 && Math.abs(pNew.getY() - pCur.getY()) == 1))
+					legit = true;
+			}
+			if (name == 'r' || name == 'R') {
+				if (checkCollision(name, pCur, pNew) && checkVertHoriMove(pCur, pNew))
+					legit = true;
+			}
+			if (name == 'p' || name == 'P') {
+				int pnx = pNew.getX();
+				int pny = pNew.getY();
+				int pcx = pCur.getX();
+				int pcy = pCur.getY();
+
+				if (name == 'p') {
+					if (checkCollision(name, pCur, pNew) && pcx < pnx && (pnx - pcx) == 1 && pny == pcy)
+						legit = true;
+					else if (checkCollision(name, pCur, pNew) == false && pcx < pnx && (pnx - pcx) == 1
+							&& (pny - pcy) == 1)
+						legit = true;
+
+					// } else if (name == 'P') {
+					// if (checkCollision(name, pNew) && pcx > pnx && (pcx -
+					// pnx) == 1 && pcy == pny)
+					// legit = true;
+					// else if (checkCollision(name, pNew) == false && pcx > pnx
+					// && (pcx - pnx) == 1 && (pcy - pny) == 1)
+					// legit = true;
+					// }
+					//
+					// if (checkCollision(name, pNew) && pcx < pnx && (pnx -
+					// pcx) == 1 && (pny - pcy) == 1)
+					// legit = true;
+					// else if (checkCollision(name, pNew) == false && pcx < pnx
+					// && (pnx - pcx) == 1 && pny == pcy)
+					// legit = true;
+
+				} else if (name == 'P') {
+					if (checkCollision(name, pCur, pNew) && pcx > pnx && (pcx - pnx) == 1 && (pcy - pny) == 1)
+						legit = true;
+					else if (checkCollision(name, pCur, pNew) == false && pcx > pnx && (pcx - pnx) == 1 && pcy == pny)
+						legit = true;
+				}
+
+			}
+
+		}
+
+		return legit;
+
+	}
+
+	public boolean checkCollision(char name, Square pCur, Square pNew) {
+
+		int pnx = pNew.getX();
+		int pny = pNew.getY();
+		int pcx = pCur.getX();
+		int pcy = pCur.getY();
+		boolean pass = true;
+
+		if (checkEnemy(name, pNew) || boardArray[pnx][pny] == '.') {
+			if (name == 'n' || name == 'N')
+				return true;
+			else if (pcx == pnx && pcy < pny) {
+
+				for (int i = 1; i <= Math.abs(pcy - pny); i++) {
+					char p = boardArray[pcx][pcy + i];
+					if (p != '.')
+						pass = false;
+				}
+			} else if (pcx == pnx && pcy > pny) {
+
+				for (int i = 1; i <= Math.abs(pcy - pny); i++) {
+					char p = boardArray[pcx][pcy - i];
+					if (p != '.')
+						pass = false;
+				}
+			} else if (pcy == pny && pcx < pnx) {
+				for (int i = 1; i <= Math.abs(pcx - pnx); i++) {
+					int p = boardArray[pcx + i][pcy];
+					if (p != '.')
+						pass = false;
+				}
+			} else if (pcy == pny && pcx > pnx) {
+				for (int i = 1; i <= Math.abs(pcx - pnx); i++) {
+					int p = boardArray[pcx - i][pcy];
+					if (p != '.')
+						pass = false;
+				}
+			} else if (Math.abs(pcx - pnx) == (Math.abs(pcy - pny))) {
+
+				if (pcy < pny && pcx < pnx) {
+					for (int i = 1; i <= Math.abs(pcx - pnx); i++) {
+						int p = boardArray[pcx + i][pcy + i];
+						if (p != '.')
+							pass = false;
+					}
+				} else if (pcy > pny && pcx > pnx) {
+					for (int i = 1; i <= Math.abs(pcx - pnx); i++) {
+						int p = boardArray[pcx - i][pcy - i];
+						if (p != '.')
+							pass = false;
+					}
+				} else if (pcy > pny && pcx < pnx) {
+					for (int i = 1; i <= Math.abs(pcx - pnx); i++) {
+						int p = boardArray[pcx + i][pcy - i];
+						if (p != '.')
+							pass = false;
+					}
+				} else if (pcy < pny && pcx > pnx) {
+					for (int i = 1; i <= Math.abs(pcx - pnx); i++) {
+						int p = boardArray[pcx - i][pcy + i];
+						if (p != '.')
+							pass = false;
+					}
+				}
+			}
+			if (checkEnemy(name, pNew))
+				pass = true;
+			// } else {
+			// int p = (int) (boardArray[pNew.getX()][pNew.getY()]);
+			// if (p == '.')
+			// return true;
+			// }
+		} else
+			pass = false;
+		return pass;
+	}
+
+	public boolean checkEnemy(char name, Square pNew) {
+		char enemy = boardArray[pNew.getX()][pNew.getY()];
+		if ((name >= 97 && name <= 122) && (enemy >= 65 && enemy <= 90))
+			return true;
+		else if ((enemy >= 97 && enemy <= 122) && (name >= 65 && name <= 90))
+			return true;
+		else
+			return false;
+	}
+
+	public boolean checkDiagonalMove(Square p1, Square p2) {
+		if (Math.abs(p1.getX() - p2.getX()) == Math.abs(p1.getY() - p2.getY()))
+			return true;
+		else
+			return false;
+	}
+
+	public boolean checkVertHoriMove(Square p1, Square p2) {
+		if ((p1.getX() == p2.getX() && p1.getY() != p2.getY()) || (p1.getX() != p2.getX() && p1.getY() == p2.getY()))
+			return true;
+		else
+			return false;
+	}
+
 }
