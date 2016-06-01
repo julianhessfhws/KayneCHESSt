@@ -25,5 +25,11 @@ public class Square {
 		this.y = y;
 	}
 	
+	
+	@Override
+	public String toString() {
+		return "Square [x=" + x + ", y=" + y + "]";
+	}
+
 	public void setXY(int x, int y) {this.x=x; this.y=y;}
 }

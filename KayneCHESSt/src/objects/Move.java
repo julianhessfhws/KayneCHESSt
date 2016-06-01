@@ -1,6 +1,9 @@
 package objects;
 
 public class Move {
+	
+
+
 	Square s1; 
 	Square s2;
 
@@ -11,5 +14,8 @@ public class Move {
 		this.s2 = s2;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return "from: "+ s1.toString() + "\tto: " +s2.toString();
+	}
 }
