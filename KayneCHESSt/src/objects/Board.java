@@ -209,6 +209,8 @@ public class Board {
 				b.boardArray[m.s1.y][m.s1.x] = '.';
 				b.roundcount++;
 
+			} else {
+				throw new Error("tried illegal move");
 			}
 
 		} catch (Exception e) {
@@ -227,13 +229,14 @@ public class Board {
 		Board z = new Board();
 		z.showStats();
 		
-		          
-		String st = "a5-a4";
-		Move mo = z.move(st);
-
-		Board j = z.move(mo);
-		String stz = "a2-a3", atzu = "b5-b4";
-		j.showStats();
+		String [] stro = {"a5-a4","d2-d3","e5-e4","d3-e4"};
+		for (int i = 0; i < stro.length; i++) {
+			String a = stro[i];
+			Move m = z.move(a);
+			z = z.move(m);
+			z.showStats();
+		}
+		
 		
 		
 	}
