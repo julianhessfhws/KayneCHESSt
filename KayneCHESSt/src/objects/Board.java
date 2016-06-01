@@ -159,49 +159,76 @@ public class Board {
 		printBoardComplete();
 	}
 
-	public boolean legalMove(int x, int y, int xz, int yz){
-		if (xz<0||xz>4||yz<0||yz>5||(x==xz&&y==yz)) return false;
-		if (upperlowerpoint(boardArray[x][y])!='l'&&playsBlack()) return false;
+	public boolean legalMove(int y, int x, int yz, int xz) {
+		if (xz < 0 || xz > 5 || yz < 0 || yz > 4 || (x == xz && y == yz))
+			return false;
+		if (upperlowerpoint(boardArray[x][y]) != 'l' && playsBlack())
+			return false;
+		if (upperlowerpoint(boardArray[x][y]) != 'u' && playsWhite())
+			return false;
+		if (upperlowerpoint(boardArray[x][y]) == upperlowerpoint(boardArray[xz][yz]))
+			return false;
+
+		if (boardArray[x][y] == 'k' || boardArray[x][y] == 'K') {
+			if (xz <= x + 1 && xz >= x - 1 && yz <= y + 1 && yz >= y - 1)
+				return true;
+		}
+		if (boardArray[x][y] == 'q' || boardArray[x][y] == 'Q') {
+			if ((Math.abs(xz - x) == Math.abs(yz - y)) || (x == xz || y == yz))
+				return true;
+		}
+		if (boardArray[x][y] == 'b' || boardArray[x][y] == 'B') {
+			if (Math.abs(xz - x) == Math.abs(yz - y))
+				return true;
+			if ((x == xz || y == yz) && Math.abs(xz - x) <= 1 && Math.abs(yz - y) <= 1 && boardArray[xz][yz] == '.')
+				return true;
+		}
+		if (boardArray[x][y] == 'n' || boardArray[x][y] == 'N') {
+			if (xz == x || yz == y)
+				return false;
+			if (Math.abs(xz - x) + Math.abs(yz - y) == 3)
+				return true;
+		}
+		if (boardArray[x][y] == 'r' || boardArray[x][y] == 'R') {
+			if (x == xz || y == yz)
+				return true;
+		}
+		if (boardArray[x][y] == 'p') {
+			if (xz == x + 1 && yz == y && boardArray[xz][yz] == '.')
+				return true;
+			if (xz == x + 1 && (yz == y + 1 || yz == y - 1) && upperlowerpoint(boardArray[xz][yz]) == 'u')
+				return true;
+		}
+		if (boardArray[x][y] == 'P') {
+			if (xz == x - 1 && yz == y && boardArray[xz][yz] == '.')
+				return true;
+			if (xz == x - 1 && (yz == y + 1 || yz == y - 1) && upperlowerpoint(boardArray[xz][yz]) == 'l')
+				return true;
+
+		}
+		return false;
+	}
+
+	public void legalMoves(Board b){
+		for (int i = 0; i < boardArray.length; i++){
+			for (int j = 0; j < boardArray[i].length; j++){
+				if(playsWhite() && upperlowerpoint(boardArray[i][j]) == 'u'){
+					
+				}
+				if(playsBlack() && upperlowerpoint(boardArray[i][j]) == 'l'){
+					
+				}
+			}
+		}
 		
-		if (boardArray[x][y]=='k' || boardArray[x][y]=='K') {
-			if (xz>x+1||xz<x-1||yz>y+1||yz<y-1) return false;
-		}
-		if (boardArray[x][y]=='q' || boardArray[x][y]=='Q') {
-			if ((x != xz && y != yz)||(Math.abs(xz-x) != Math.abs(yz-y))) return false;
-		}
-		if (boardArray[x][y]=='b' || boardArray[x][y]=='B') {
-			if((Math.abs(xz-x) != Math.abs(yz-y)) && (Math.abs(xz-x) > 1 || Math.abs(yz-y) > 1)) return false;
-			if((x != xz && y != yz) && boardArray[xz][yz]!='.') return false;		
-		}
-		if (boardArray[x][y]=='n' || boardArray[x][y]=='N') {
-			if(xz == x || yz == y) return false;
-			if(Math.abs(xz - x) + Math.abs(yz - y) != 3) return false;
-		}
-		if (boardArray[x][y]=='r' || boardArray[x][y]=='R') {
-			if(x != xz && y != yz) return false;
-		}
-		if (boardArray[x][y]=='p') {
-			if((yz != y-1)||(xz < x-1 || xz > x+1)) return false;
-			if(upperlowerpoint(boardArray[xz][yz])!=upperlowerpoint(boardArray[x][y])&&x==xz) return false;
-			if(upperlowerpoint(boardArray[xz][yz])==upperlowerpoint(boardArray[x][y])&&x!=xz) return false;
-			if(boardArray[xz][yz]=='.' && x!=xz) return false;
-		}		
-		if (boardArray[x][y]=='P') {
-			if((yz != y+1)||(xz < x-1 || xz > x+1)) return false;
-			if(upperlowerpoint(boardArray[xz][yz])!=upperlowerpoint(boardArray[x][y])&&x==xz) return false;
-			if(upperlowerpoint(boardArray[xz][yz])==upperlowerpoint(boardArray[x][y])&&x!=xz) return false;
-			if(boardArray[xz][yz]=='.' && x!=xz) return false;
-		
-		}
-		return true;
 	}
 	
 	public Board move(Move m) {
 		Board b = new Board(roundcount, boardArray);
 		try {
-			if (	legalMove(m.s1.x, m.s1.y, m.s2.x, m.s2.y)
+			if (legalMove(m.s1.x, m.s1.y, m.s2.x, m.s2.y)
 					&& ((upperlowerpoint(boardArray[m.s1.y][m.s1.x]) == 'l' && playsBlack())
-					|| (upperlowerpoint(boardArray[m.s1.y][m.s1.x]) == 'u' && playsWhite()))) {
+							|| (upperlowerpoint(boardArray[m.s1.y][m.s1.x]) == 'u' && playsWhite()))) {
 
 				// legal move ?
 
@@ -228,16 +255,14 @@ public class Board {
 	public static void main(String[] args) throws IOException {
 		Board z = new Board();
 		z.showStats();
-		
-		String [] stro = {"a5-a4","d2-d3","e5-e4","d3-e4"};
+
+		String[] stro = { "e5-e4", "d2-d3", "e4-d3", "e2-d3" };
 		for (int i = 0; i < stro.length; i++) {
 			String a = stro[i];
 			Move m = z.move(a);
 			z = z.move(m);
 			z.showStats();
 		}
-		
-		
-		
+
 	}
 }
