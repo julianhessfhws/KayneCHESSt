@@ -8,15 +8,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-import org.omg.CosNaming.IstringHelper;
-
 public class Board {
 
-// Variables
+	// Variables
 	int roundcount;
 	char[][] boardArray;
 
-// Constructors
+	// Constructors
 	public Board(int roundcount, char[][] boardArray) {
 
 		this.roundcount = roundcount;
@@ -55,8 +53,7 @@ public class Board {
 		}
 	}
 
-	
-// Helping Methods
+	// Helping Methods
 	public char upperlowerpoint(char c) {
 		int i = c;
 		if (i >= 97 && i <= 122)
@@ -85,7 +82,6 @@ public class Board {
 			return true;
 	}
 
-	
 	public void showStats() {
 		char c;
 
@@ -106,7 +102,7 @@ public class Board {
 		}
 	}
 
-// not used methods: mappingA1ToSquare, printBoardComplete, boardToString
+	// not used methods: mappingA1ToSquare, printBoardComplete, boardToString
 	/*
 	 * public Square mappingA1ToSquare(char alpha, char nr) { Square s = new
 	 * Square(alpha - 97, nr - 49); return s; }
@@ -119,32 +115,30 @@ public class Board {
 	 * boardArray.length; i++) { for (int j = 0; j < boardArray[i].length; j++){
 	 * str += boardArray[i][j]; } } return str; }
 	 *
-	 *public boolean aNewMoveThatIsMaybeLegalMaybeNot(Square start, Square end){
-		if((start.x<0||start.y<0||end.x<0||end.y<0||start.x>4||start.y>5||end.x>4||end.y>5)
-			|| (start.x==end.x&&start.y==end.y)
-			|| (upperlowerpoint(boardArray[start.y][start.x])==upperlowerpoint(boardArray[end.y][end.x]))
-		) 	return false;
-		
-		if(boardArray[start.y][start.x]=='k'||boardArray[start.y][start.x]=='K'){
-			int dx = start.x-end.x, dy = end.y-start.y;
-			if(dx>1||dx<-1||dy<-1||dy>1) return false;
-		}
-		
-		if(boardArray[start.y][start.x]=='N'||boardArray[start.y][start.x]=='n'){
-			if(start.x==end.x||start.y==end.y) return false;
-			
-		}
-		
-		
-		
-		return true;
-	}
-	
+	 * public boolean aNewMoveThatIsMaybeLegalMaybeNot(Square start, Square
+	 * end){
+	 * if((start.x<0||start.y<0||end.x<0||end.y<0||start.x>4||start.y>5||end.x>4
+	 * ||end.y>5) || (start.x==end.x&&start.y==end.y) ||
+	 * (upperlowerpoint(boardArray[start.y][start.x])==upperlowerpoint(
+	 * boardArray[end.y][end.x])) ) return false;
+	 * 
+	 * if(boardArray[start.y][start.x]=='k'||boardArray[start.y][start.x]=='K'){
+	 * int dx = start.x-end.x, dy = end.y-start.y; if(dx>1||dx<-1||dy<-1||dy>1)
+	 * return false; }
+	 * 
+	 * if(boardArray[start.y][start.x]=='N'||boardArray[start.y][start.x]=='n'){
+	 * if(start.x==end.x||start.y==end.y) return false;
+	 * 
+	 * }
+	 * 
+	 * 
+	 * 
+	 * return true; }
 	 *
+	 * 
 	 */
-	
-	
-// I/O Methods
+
+	// I/O Methods
 	public static String incomingFiles() throws IOException {
 		String end = "";
 		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("C:\\here\\in.txt")));
@@ -176,8 +170,7 @@ public class Board {
 		}
 	}
 
-	
-// Moving Methods
+	// Moving Methods
 	public boolean legalMove(int y, int x, int yz, int xz) {
 		if (xz < 0 || xz > 5 || yz < 0 || yz > 4 || (x == xz && y == yz))
 			return false;
@@ -191,8 +184,8 @@ public class Board {
 		if (boardArray[x][y] == 'k' || boardArray[x][y] == 'K') {
 			if (xz <= x + 1 && xz >= x - 1 && yz <= y + 1 && yz >= y - 1)
 				return true;
- 		}
-		
+		}
+
 		if (boardArray[x][y] == 'q' || boardArray[x][y] == 'Q') {
 			if ((Math.abs(xz - x) == Math.abs(yz - y)) || (x == xz || y == yz))
 				return true;
@@ -228,16 +221,16 @@ public class Board {
 		}
 		return false;
 	}
-	
+
 	public Board move(Move m) {
 		Board b = new Board(roundcount, boardArray);
 		try {
-			if (	
-					//(b.aNewMoveThatIsMaybeLegalMaybeNot(m.s1, m.s2)||
-					b.legalMove(m.s1.x, m.s1.y, m.s2.x, m.s2.y)//)
+			if (
+			// (b.aNewMoveThatIsMaybeLegalMaybeNot(m.s1, m.s2)||
+			b.legalMove(m.s1.x, m.s1.y, m.s2.x, m.s2.y)// )
 					&& ((upperlowerpoint(boardArray[m.s1.y][m.s1.x]) == 'l' && playsBlack())
-					|| (upperlowerpoint(boardArray[m.s1.y][m.s1.x]) == 'u' && playsWhite()))
-					
+							|| (upperlowerpoint(boardArray[m.s1.y][m.s1.x]) == 'u' && playsWhite()))
+
 			) {
 
 				// legal move ?
@@ -261,15 +254,9 @@ public class Board {
 		char[] c = s.toCharArray();
 		return (new Move(new Square(c[0] - 97, c[1] - 49), new Square(c[3] - 97, c[4] - 49)));
 	}
-	
-	
-	
-	
-	
-	
-	//CASS------------------------------------------
-	
-	
+
+	// CASS------------------------------------------
+
 	public boolean checkLegalMove(Square pCur, Square pNew) {
 		char name = boardArray[pCur.x][pCur.y];
 		boolean legit = false;
@@ -309,38 +296,24 @@ public class Board {
 				int pcx = pCur.getX();
 				int pcy = pCur.getY();
 
-				if (name == 'p') {
-					if (checkCollision(name, pCur, pNew) && pcx < pnx && (pnx - pcx) == 1 && pny == pcy)
-						legit = true;
-					else if (checkCollision(name, pCur, pNew) == false && pcx < pnx && (pnx - pcx) == 1
-							&& (pny - pcy) == 1)
-						legit = true;
+				if (pNew.getY() == pCur.getY() && boardArray[pNew.getX()][pNew.getY()] == '.'
+						&& boardArray[pNew.getX()][pNew.getY() - 1] == '.'
+						&& boardArray[pNew.getX()][pNew.getY() + 1] == '.') {
+					if (name == 'p') {
+						if (checkCollision(name, pCur, pNew) && pcx < pnx && (pnx - pcx) == 1 && pny == pcy)
+							legit = true;
+					}
 
-					// } else if (name == 'P') {
-					// if (checkCollision(name, pNew) && pcx > pnx && (pcx -
-					// pnx) == 1 && pcy == pny)
-					// legit = true;
-					// else if (checkCollision(name, pNew) == false && pcx > pnx
-					// && (pcx - pnx) == 1 && (pcy - pny) == 1)
-					// legit = true;
-					// }
-					//
-					// if (checkCollision(name, pNew) && pcx < pnx && (pnx -
-					// pcx) == 1 && (pny - pcy) == 1)
-					// legit = true;
-					// else if (checkCollision(name, pNew) == false && pcx < pnx
-					// && (pnx - pcx) == 1 && pny == pcy)
-					// legit = true;
-
-				} else if (name == 'P') {
-					if (checkCollision(name, pCur, pNew) && pcx > pnx && (pcx - pnx) == 1 && (pcy - pny) == 1)
-						legit = true;
-					else if (checkCollision(name, pCur, pNew) == false && pcx > pnx && (pcx - pnx) == 1 && pcy == pny)
-						legit = true;
-				}
+					else if (name == 'P') {
+						if (checkCollision(name, pCur, pNew) && pcx > pnx && (pcx - pnx) == 1 && pcy == pny)
+							legit = true;
+					}
+				} else if (Math.abs(pNew.getY() - pCur.getY()) == 1 && checkEnemy(name, pNew))
+					legit = true;
+				else
+					legit = false;
 
 			}
-
 		}
 
 		return legit;
@@ -423,6 +396,7 @@ public class Board {
 			pass = false;
 		return pass;
 	}
+
 	public boolean checkEnemy(char name, Square pNew) {
 		char enemy = boardArray[pNew.getX()][pNew.getY()];
 		if ((name >= 97 && name <= 122) && (enemy >= 65 && enemy <= 90))
@@ -446,23 +420,18 @@ public class Board {
 		else
 			return false;
 	}
-	
-	
-	//CASS------------------------------------------
-	
-	
-	
-	
-	
-	public ArrayList<Move> allTheSmallMoves(){
+
+	// CASS------------------------------------------
+
+	public ArrayList<Move> allTheSmallMoves() {
 		ArrayList<Move> thingy = new ArrayList<>();
 		for (int i = 0; i < boardArray.length; i++) {
 			for (int j = 0; j < boardArray[i].length; j++) {
-				if(boardArray[i][j]!='.'){
+				if (boardArray[i][j] != '.') {
 					for (int k = 0; k < boardArray.length; k++) {
 						for (int l = 0; l < boardArray[k].length; l++) {
-							if(checkLegalMove(new Square(i, j),new Square(k, l))) {
-								thingy.add(new Move(new Square(i, j),new Square(k, l)));
+							if (checkLegalMove(new Square(i, j), new Square(k, l))) {
+								thingy.add(new Move(new Square(i, j), new Square(k, l)));
 							}
 						}
 					}
@@ -471,29 +440,29 @@ public class Board {
 		}
 		return thingy;
 	}
-	
-// Main Method
+
+	// Main Method
 	public static void main(String[] args) throws IOException {
-//		Board z = new Board();
-//		z.showStats();
-//
-//		String[] stro = { "a5-a4", "d2-d3", "d3-d4", "d3-e4" };
-//		for (int i = 0; i < stro.length; i++) {
-//			String a = stro[i];
-//			Move m = z.move(a);
-//			z = z.move(m);
-//			z.showStats();
-//		}
+		// Board z = new Board();
+		// z.showStats();
+		//
+		// String[] stro = { "a5-a4", "d2-d3", "d3-d4", "d3-e4" };
+		// for (int i = 0; i < stro.length; i++) {
+		// String a = stro[i];
+		// Move m = z.move(a);
+		// z = z.move(m);
+		// z.showStats();
+		// }
 		Board portd = new Board();
 		ArrayList<Move> arl = portd.allTheSmallMoves();
 		Move[] mdfjh = new Move[arl.size()];
 		for (int i = 0; i < arl.size(); i++) {
-			mdfjh[i]=arl.get(i);
+			mdfjh[i] = arl.get(i);
 		}
-		
+
 		for (int i = 0; i < mdfjh.length; i++) {
 			System.out.println(mdfjh[i].toString());
 		}
-		
+
 	}
 }
