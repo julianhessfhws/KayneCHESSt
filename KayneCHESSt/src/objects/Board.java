@@ -349,74 +349,101 @@ public class Board {
 		int pcx = pCur.getX();
 		int pcy = pCur.getY();
 		boolean pass = true;
+		boolean enemyTarget = checkEnemy(name, pNew);
 
 		if (checkEnemy(name, pNew) || boardArray[pnx][pny] == '.') {
-			if (name == 'n' || name == 'N')
-				return true;
-			else if (pcx == pnx && pcy < pny) {
 
-				for (int i = 1; i <= Math.abs(pcy - pny); i++) {
-					char p = boardArray[pcx][pcy + i];
-					if (p != '.')
+		}
+		if (name == 'n' || name == 'N')
+			return true;
+		else if (pcx == pnx && pcy < pny) {
+
+			for (int i = 1; i <= Math.abs(pcy - pny); i++) {
+				char p = boardArray[pcx][pcy + i];
+				if (p != '.') {
+					if (i == Math.abs(pcy - pny) && enemyTarget)
+						pass = true;
+					else
 						pass = false;
 				}
-			} else if (pcx == pnx && pcy > pny) {
+			}
+		} else if (pcx == pnx && pcy > pny) {
 
-				for (int i = 1; i <= Math.abs(pcy - pny); i++) {
-					char p = boardArray[pcx][pcy - i];
-					if (p != '.')
+			for (int i = 1; i <= Math.abs(pcy - pny); i++) {
+				char p = boardArray[pcx][pcy - i];
+				if (p != '.') {
+					if (i == Math.abs(pcy - pny) && enemyTarget)
+						pass = true;
+					else
 						pass = false;
 				}
-			} else if (pcy == pny && pcx < pnx) {
+			}
+		} else if (pcy == pny && pcx < pnx) {
+			for (int i = 1; i <= Math.abs(pcx - pnx); i++) {
+				int p = boardArray[pcx + i][pcy];
+				if (p != '.') {
+					if (i == Math.abs(pcy - pny) && enemyTarget)
+						pass = true;
+					else
+						pass = false;
+				}
+			}
+		} else if (pcy == pny && pcx > pnx) {
+			for (int i = 1; i <= Math.abs(pcx - pnx); i++) {
+				int p = boardArray[pcx - i][pcy];
+				if (p != '.') {
+					if (i == Math.abs(pcy - pny) && enemyTarget)
+						pass = true;
+					else
+						pass = false;
+				}
+			}
+		} else if (Math.abs(pcx - pnx) == (Math.abs(pcy - pny))) {
+
+			if (pcy < pny && pcx < pnx) {
 				for (int i = 1; i <= Math.abs(pcx - pnx); i++) {
-					int p = boardArray[pcx + i][pcy];
-					if (p != '.')
-						pass = false;
+					int p = boardArray[pcx + i][pcy + i];
+					if (p != '.') {
+						if (i == Math.abs(pcy - pny) && enemyTarget)
+							pass = true;
+						else
+							pass = false;
+					}
 				}
-			} else if (pcy == pny && pcx > pnx) {
+			} else if (pcy > pny && pcx > pnx) {
 				for (int i = 1; i <= Math.abs(pcx - pnx); i++) {
-					int p = boardArray[pcx - i][pcy];
-					if (p != '.')
-						pass = false;
+					int p = boardArray[pcx - i][pcy - i];
+					if (p != '.') {
+						if (i == Math.abs(pcy - pny) && enemyTarget)
+							pass = true;
+						else
+							pass = false;
+					}
 				}
-			} else if (Math.abs(pcx - pnx) == (Math.abs(pcy - pny))) {
-
-				if (pcy < pny && pcx < pnx) {
-					for (int i = 1; i <= Math.abs(pcx - pnx); i++) {
-						int p = boardArray[pcx + i][pcy + i];
-						if (p != '.')
+			} else if (pcy > pny && pcx < pnx) {
+				for (int i = 1; i <= Math.abs(pcx - pnx); i++) {
+					int p = boardArray[pcx + i][pcy - i];
+					if (p != '.') {
+						if (i == Math.abs(pcy - pny) && enemyTarget)
+							pass = true;
+						else
 							pass = false;
 					}
-				} else if (pcy > pny && pcx > pnx) {
-					for (int i = 1; i <= Math.abs(pcx - pnx); i++) {
-						int p = boardArray[pcx - i][pcy - i];
-						if (p != '.')
-							pass = false;
-					}
-				} else if (pcy > pny && pcx < pnx) {
-					for (int i = 1; i <= Math.abs(pcx - pnx); i++) {
-						int p = boardArray[pcx + i][pcy - i];
-						if (p != '.')
-							pass = false;
-					}
-				} else if (pcy < pny && pcx > pnx) {
-					for (int i = 1; i <= Math.abs(pcx - pnx); i++) {
-						int p = boardArray[pcx - i][pcy + i];
-						if (p != '.')
+				}
+			} else if (pcy < pny && pcx > pnx) {
+				for (int i = 1; i <= Math.abs(pcx - pnx); i++) {
+					int p = boardArray[pcx - i][pcy + i];
+					if (p != '.') {
+						if (i == Math.abs(pcy - pny) && enemyTarget)
+							pass = true;
+						else
 							pass = false;
 					}
 				}
 			}
-			if (checkEnemy(name, pNew))
-				pass = true;
-			// } else {
-			// int p = (int) (boardArray[pNew.getX()][pNew.getY()]);
-			// if (p == '.')
-			// return true;
-			// }
-		} else
-			pass = false;
+		}
 		return pass;
+
 	}
 
 	public boolean checkEnemy(char name, Square pNew) {
