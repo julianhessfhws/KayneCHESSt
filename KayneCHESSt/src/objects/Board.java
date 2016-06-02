@@ -6,15 +6,12 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 
 public class Board {
 
-	// Variables
 	int roundcount;
 	char[][] boardArray;
 
-	// Constructors
 	public Board(int roundcount, char[][] boardArray) {
 
 		this.roundcount = roundcount;
@@ -24,7 +21,14 @@ public class Board {
 	public Board() {
 		this.roundcount = 0;
 		this.boardArray = new char[6][5];
-
+		/*
+		 * int[] figs = {107, 113, 98, 110, 114}; for (int i = 0; i <
+		 * boardArray.length-1; i++) { for (int j = 0; j <
+		 * boardArray[i].length-1; j++) { if (i == 0) boardArray[i][j] =
+		 * (char)(figs[j]); if (i == 1) boardArray[i][j] = (char)112; if (i > 1
+		 * && i < 4) boardArray[i][j] = (char)46; if (i == 4) boardArray[i][j] =
+		 * (char)(80); if (i == 5) boardArray[i][j] = (char)(figs[4-j]-32); } }
+		 */
 		char[] c = { 'k', 'q', 'b', 'n', 'r' }, C = { 'R', 'N', 'B', 'Q', 'K' };
 		for (int i = 0; i < 1; i++) {
 			for (int j = 0; j < boardArray[0].length; j++) {
@@ -53,7 +57,6 @@ public class Board {
 		}
 	}
 
-	// Helping Methods
 	public char upperlowerpoint(char c) {
 		int i = c;
 		if (i >= 97 && i <= 122)
@@ -82,17 +85,15 @@ public class Board {
 			return true;
 	}
 
-	public void showStats() {
-		char c;
+	public Square mappingA1ToSquare(char alpha, char nr) {
+		Square s = new Square(alpha - 97, nr - 49);
+		return s;
+	}
 
-		if (playsWhite())
-			c = 'W';
-		else
-			c = 'B';
-
-		System.out.println("\n" + roundcount / 2 + "   " + c + "\n");
+	private void printBoardComplete() {
 		String s = "";
 		int i, j;
+
 		for (i = 0; i < boardArray.length; i++) {
 			for (j = 0; j < boardArray[0].length; j++) {
 				s = (s + boardArray[i][j] + " ");
@@ -102,43 +103,17 @@ public class Board {
 		}
 	}
 
-	// not used methods: mappingA1ToSquare, printBoardComplete, boardToString
-	/*
-	 * public Square mappingA1ToSquare(char alpha, char nr) { Square s = new
-	 * Square(alpha - 97, nr - 49); return s; }
-	 * 
-	 * private void printBoardComplete() { String s = ""; int i, j; for (i = 0;
-	 * i < boardArray.length; i++) { for (j = 0; j < boardArray[0].length; j++)
-	 * { s = (s + boardArray[i][j] + " "); } System.out.println(s); s = ""; } }
-	 * 
-	 * private String boardToString() { String str = ""; for (int i = 0; i <
-	 * boardArray.length; i++) { for (int j = 0; j < boardArray[i].length; j++){
-	 * str += boardArray[i][j]; } } return str; }
-	 *
-	 * public boolean aNewMoveThatIsMaybeLegalMaybeNot(Square start, Square
-	 * end){
-	 * if((start.x<0||start.y<0||end.x<0||end.y<0||start.x>4||start.y>5||end.x>4
-	 * ||end.y>5) || (start.x==end.x&&start.y==end.y) ||
-	 * (upperlowerpoint(boardArray[start.y][start.x])==upperlowerpoint(
-	 * boardArray[end.y][end.x])) ) return false;
-	 * 
-	 * if(boardArray[start.y][start.x]=='k'||boardArray[start.y][start.x]=='K'){
-	 * int dx = start.x-end.x, dy = end.y-start.y; if(dx>1||dx<-1||dy<-1||dy>1)
-	 * return false; }
-	 * 
-	 * if(boardArray[start.y][start.x]=='N'||boardArray[start.y][start.x]=='n'){
-	 * if(start.x==end.x||start.y==end.y) return false;
-	 * 
-	 * }
-	 * 
-	 * 
-	 * 
-	 * return true; }
-	 *
-	 * 
-	 */
+	private String boardToString() {
+		String str = "";
+		for (int i = 0; i < boardArray.length; i++) {
+			for (int j = 0; j < boardArray[i].length; j++) {
+				str += boardArray[i][j];
+			}
 
-	// I/O Methods
+		}
+		return str;
+	}
+
 	public static String incomingFiles() throws IOException {
 		String end = "";
 		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("C:\\here\\in.txt")));
@@ -170,7 +145,18 @@ public class Board {
 		}
 	}
 
-	// Moving Methods
+	public void showStats() {
+		char c;
+
+		if (playsWhite())
+			c = 'W';
+		else
+			c = 'B';
+
+		System.out.println("\n" + roundcount + "   " + c + "\n");
+		printBoardComplete();
+	}
+
 	public boolean legalMove(int y, int x, int yz, int xz) {
 		if (xz < 0 || xz > 5 || yz < 0 || yz > 4 || (x == xz && y == yz))
 			return false;
@@ -185,7 +171,6 @@ public class Board {
 			if (xz <= x + 1 && xz >= x - 1 && yz <= y + 1 && yz >= y - 1)
 				return true;
 		}
-
 		if (boardArray[x][y] == 'q' || boardArray[x][y] == 'Q') {
 			if ((Math.abs(xz - x) == Math.abs(yz - y)) || (x == xz || y == yz))
 				return true;
@@ -222,16 +207,26 @@ public class Board {
 		return false;
 	}
 
+	public void legalMoves(Board b) {
+		for (int i = 0; i < boardArray.length; i++) {
+			for (int j = 0; j < boardArray[i].length; j++) {
+				if (playsWhite() && upperlowerpoint(boardArray[i][j]) == 'u') {
+
+				}
+				if (playsBlack() && upperlowerpoint(boardArray[i][j]) == 'l') {
+
+				}
+			}
+		}
+
+	}
+
 	public Board move(Move m) {
 		Board b = new Board(roundcount, boardArray);
 		try {
-			if (
-			// (b.aNewMoveThatIsMaybeLegalMaybeNot(m.s1, m.s2)||
-			b.legalMove(m.s1.x, m.s1.y, m.s2.x, m.s2.y)// )
+			if (legalMove(m.s1.x, m.s1.y, m.s2.x, m.s2.y)
 					&& ((upperlowerpoint(boardArray[m.s1.y][m.s1.x]) == 'l' && playsBlack())
-							|| (upperlowerpoint(boardArray[m.s1.y][m.s1.x]) == 'u' && playsWhite()))
-
-			) {
+							|| (upperlowerpoint(boardArray[m.s1.y][m.s1.x]) == 'u' && playsWhite()))) {
 
 				// legal move ?
 
@@ -255,10 +250,23 @@ public class Board {
 		return (new Move(new Square(c[0] - 97, c[1] - 49), new Square(c[3] - 97, c[4] - 49)));
 	}
 
-	// CASS------------------------------------------
+	public static void main(String[] args) throws IOException {
+		Board z = new Board();
+		z.showStats();
 
-	public boolean checkLegalMove(Square pCur, Square pNew) {
-		char name = boardArray[pCur.x][pCur.y];
+		String[] stro = { "e5-e4", "d2-d3", "e4-d3", "e2-d3" };
+		for (int i = 0; i < stro.length; i++) {
+			String a = stro[i];
+			Move m = z.move(a);
+			z = z.move(m);
+			z.showStats();
+		}
+
+	}
+
+	// Zeug von Cassie
+
+	public boolean checkLegalMove(char name, Square pCur, Square pNew) {
 		boolean legit = false;
 
 		if (pNew.getX() >= 0 && pNew.getX() <= 5 && pNew.getY() >= 0 && pNew.getY() <= 4
@@ -297,8 +305,7 @@ public class Board {
 				int pcy = pCur.getY();
 
 				if (pNew.getY() == pCur.getY() && boardArray[pNew.getX()][pNew.getY()] == '.'
-						&& boardArray[pNew.getX()][pNew.getY() - 1] == '.'
-						&& boardArray[pNew.getX()][pNew.getY() + 1] == '.') {
+						&& Math.abs(pNew.getX() - pCur.getX()) == 1) {
 					if (name == 'p') {
 						if (checkCollision(name, pCur, pNew) && pcx < pnx && (pnx - pcx) == 1 && pny == pcy)
 							legit = true;
@@ -308,12 +315,14 @@ public class Board {
 						if (checkCollision(name, pCur, pNew) && pcx > pnx && (pcx - pnx) == 1 && pcy == pny)
 							legit = true;
 					}
-				} else if (Math.abs(pNew.getY() - pCur.getY()) == 1 && checkEnemy(name, pNew))
+				} else if (Math.abs(pNew.getY() - pCur.getY()) == 1 && checkEnemy(name, pNew)
+						&& Math.abs(pNew.getX() - pCur.getX()) == 1)
 					legit = true;
 				else
 					legit = false;
 
 			}
+
 		}
 
 		return legit;
@@ -421,48 +430,4 @@ public class Board {
 			return false;
 	}
 
-	// CASS------------------------------------------
-
-	public ArrayList<Move> allTheSmallMoves() {
-		ArrayList<Move> thingy = new ArrayList<>();
-		for (int i = 0; i < boardArray.length; i++) {
-			for (int j = 0; j < boardArray[i].length; j++) {
-				if (boardArray[i][j] != '.') {
-					for (int k = 0; k < boardArray.length; k++) {
-						for (int l = 0; l < boardArray[k].length; l++) {
-							if (checkLegalMove(new Square(i, j), new Square(k, l))) {
-								thingy.add(new Move(new Square(i, j), new Square(k, l)));
-							}
-						}
-					}
-				}
-			}
-		}
-		return thingy;
-	}
-
-	// Main Method
-	public static void main(String[] args) throws IOException {
-		// Board z = new Board();
-		// z.showStats();
-		//
-		// String[] stro = { "a5-a4", "d2-d3", "d3-d4", "d3-e4" };
-		// for (int i = 0; i < stro.length; i++) {
-		// String a = stro[i];
-		// Move m = z.move(a);
-		// z = z.move(m);
-		// z.showStats();
-		// }
-		Board portd = new Board();
-		ArrayList<Move> arl = portd.allTheSmallMoves();
-		Move[] mdfjh = new Move[arl.size()];
-		for (int i = 0; i < arl.size(); i++) {
-			mdfjh[i] = arl.get(i);
-		}
-
-		for (int i = 0; i < mdfjh.length; i++) {
-			System.out.println(mdfjh[i].toString());
-		}
-
-	}
 }
